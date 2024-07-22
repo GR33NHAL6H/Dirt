@@ -1,0 +1,418 @@
+set cut_paste_input [stack 0]
+version 14.0 v5
+Group {
+ inputs 0
+ name DIRT
+ tile_color 0xf8873ff
+ label "\n<k>\[value Seed]\n\n"
+ note_font "Bitstream Vera Sans Bold Italic"
+ note_font_color 0x88f7c5ff
+ selected true
+ xpos -636
+ ypos 1563
+ addUserKnob {20 User l -}
+ addUserKnob {26 txt l "" +STARTLINE T "<b><font size=\"60\"><font color=\"#009973\">DIRT</font></b>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 _2 l "<b><font color=\"#009973\">Adjust Dirt Layers</font></b>"}
+ addUserKnob {20 AdjustDirt l "" +STARTLINE n 1}
+ AdjustDirt 0
+ addUserKnob {41 Preset l "Dirt Look" T CONTROL_DIRT.Preset}
+ addUserKnob {41 DirtLayers l Layers T CONTROL_DIRT.DirtLayers}
+ addUserKnob {41 Seed T CONTROL_DIRT.Seed}
+ addUserKnob {41 DirtSize l Size T CONTROL_DIRT.DirtSize}
+ addUserKnob {41 anamorph l Anamorph T Flare1.anamorph}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 _1 l "<b><font color=\"#009973\">Colour & Texture</font></b>"}
+ addUserKnob {20 AdjustCol l "" +STARTLINE n 1}
+ AdjustCol 0
+ addUserKnob {41 mix_1 l Texture T Merge3.mix}
+ addUserKnob {41 which l "Dirt Colour" T Dissolve1.which}
+ addUserKnob {41 color l "Overall Colour" T Noise1.color}
+ addUserKnob {41 bg l "Dirt Only" T CONTROL_DIRT.bg}
+ addUserKnob {20 endGroup_1 n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 txt2 l "" +STARTLINE T "<div style=\"text-align: left; font-size: 10px; color: #666666; font-style: italic;\">\n  v 1.1 : 2023-02\n</div>"}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant1
+  xpos 1737
+  ypos 733
+ }
+set N2b1f1d30 [stack 0]
+ Dot {
+  name Dot1
+  xpos 1901
+  ypos 760
+ }
+ Radial {
+  area {0 {-(height)} {width} {height*2}}
+  name Radial1
+  xpos 1867
+  ypos 1080
+ }
+push $N2b1f1d30
+ Noise {
+  size 1000
+  zoffset {{parent.CONTROL_DIRT.Seed}}
+  gain 0.395
+  gamma 0.61
+  scale {1 2}
+  center {2048 1512}
+  color {0.4052592516 0.3106787503 0.240259245 0}
+  name Noise1
+  xpos 1737
+  ypos 864
+  disable {{parent.CONTROL_DIRT.bg x1000 1}}
+ }
+set N36e13400 [stack 0]
+ Grade {
+  white 4
+  multiply 1.52
+  gamma 0.77
+  black_clamp false
+  name Grade10
+  xpos 1477
+  ypos 864
+ }
+ Noise {
+  inputs 0
+  type turbulence
+  size 11
+  zoffset {{(((frame%1)*20)/20)}}
+  lacunarity 2.88
+  gain 0.8
+  gamma 0.435
+  scale {1 24}
+  center {1042.5 725.5}
+  name Noise4
+  xpos 686
+  ypos 298
+ }
+ Transform {
+  rotate {{(TimeBlur1.decimalFrameStepped)*360}}
+  scale {{(TimeBlur1.decimalFrameStepped)*5+1}}
+  center {1042.5 725.5}
+  name Transform1
+  xpos 683
+  ypos 374
+ }
+set Nde9f57a0 [stack 0]
+ Transform {
+  scale 1.1
+  center {1042.5 725.5}
+  name Transform2
+  xpos 685
+  ypos 424
+ }
+ Grade {
+  channels rgba
+  gamma 0.2
+  name Grade3
+  xpos 798
+  ypos 416
+ }
+push $Nde9f57a0
+ Flare {
+  inputs 0
+  position {251 262}
+  radius {55.19 73.95 87.86}
+  size_mult {{(TimeBlur1.decimalFrameStepped)+CONTROL_DIRT.DirtSize}}
+  anamorph {{parent.Flare1.anamorph}}
+  inner_color 0.395
+  outer_falloff 10
+  inner_falloff 10
+  name Flare3
+  xpos 591
+  ypos 142
+ }
+ Flare {
+  inputs 0
+  position {251 262}
+  radius {34.22 57.39 85.65}
+  size_mult {{(TimeBlur1.decimalFrameStepped)+CONTROL_DIRT.DirtSize}}
+  anamorph {{parent.Flare1.anamorph}}
+  inner_color 1
+  outer_falloff 10
+  name Flare2
+  xpos 715
+  ypos 143
+ }
+ Flare {
+  inputs 0
+  position {251 262}
+  radius {55.19 73.95 87.86}
+  size_mult {{(TimeBlur1.decimalFrameStepped)+CONTROL_DIRT.DirtSize}}
+  inner_color 0.565
+  outer_falloff 3.2
+  inner_falloff 0.55
+  name Flare1
+  xpos 828
+  ypos 147
+ }
+ Switch {
+  inputs 3
+  which {{CONTROL_DIRT.Preset}}
+  name Switch1
+  xpos 828
+  ypos 200
+ }
+ Expression {
+  expr3 r
+  name Expression1
+  xpos 827
+  ypos 232
+ }
+ Crop {
+  box {0 0 500 500}
+  reformat true
+  name Crop2
+  xpos 826
+  ypos 324
+ }
+ Noise {
+  inputs 0
+  size 480
+  zoffset {{parent.CONTROL_DIRT.Seed+3}}
+  gain 0.675
+  gamma 0.15
+  center {2048 1512}
+  name Noise9
+  xpos 1347
+  ypos 162
+ }
+ Noise {
+  inputs 0
+  size 480
+  zoffset {{parent.CONTROL_DIRT.Seed+2}}
+  gain 0.695
+  gamma 0.125
+  center {2048 1512}
+  name Noise6
+  xpos 1347
+  ypos 108
+ }
+ Noise {
+  inputs 0
+  size 1000
+  zoffset {{parent.CONTROL_DIRT.Seed+1}}
+  gain 0.655
+  gamma 0.095
+  center {2048 1512}
+  name Noise5
+  xpos 1347
+  ypos 54
+ }
+ Noise {
+  inputs 0
+  size 1000
+  zoffset {{parent.CONTROL_DIRT.Seed}}
+  gain 0.68
+  gamma 0.09
+  center {2048 1512}
+  name Noise2
+  xpos 1347
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant7
+  xpos 1087
+  ypos -185
+ }
+ NoTimeBlur {
+  name NoTimeBlur2
+  xpos 1087
+  ypos -108
+ }
+ Noise {
+  size 13
+  zoffset {{((TimeBlur1.decimalFrameStepped)*CONTROL_DIRT.Seed)+CONTROL_DIRT.Seed}}
+  gain 0.485
+  gamma 0.03
+  center {2048 1512}
+  name Noise3
+  xpos 1087
+  ypos -54
+ }
+set Nf894bc80 [stack 0]
+ Grade {
+  inputs 1+1
+  white {0.1166666374 2.766666651 0.1166666374 1}
+  black_clamp false
+  name Grade6
+  xpos 1087
+ }
+ Grade {
+  inputs 1+1
+  white {2.183333397 -1.366666675 2.183333397 1}
+  black_clamp false
+  name Grade7
+  xpos 1086
+  ypos 54
+ }
+ Grade {
+  inputs 1+1
+  white {3.506666422 -0.01333339978 -0.4933335781 1}
+  black_clamp false
+  name Grade8
+  xpos 1087
+  ypos 108
+ }
+ Grade {
+  inputs 1+1
+  white {-0.8250002861 0.9999998212 2.824999809 1}
+  black_clamp false
+  name Grade11
+  xpos 1087
+  ypos 163
+ }
+push $Nf894bc80
+ Dot {
+  name Dot2
+  xpos 1000
+  ypos 15
+ }
+ Dissolve {
+  inputs 2
+  which 0.3
+  name Dissolve1
+  xpos 1084
+  ypos 213
+ }
+ Convolve2 {
+  inputs 2
+  channels rgba
+  filter_bounds format
+  name Convolve4
+  xpos 1088
+  ypos 324
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  mix 0.5
+  name Merge3
+  xpos 1086
+  ypos 364
+ }
+ Grade {
+  inputs 1+1
+  white 4
+  mix {{parent.Merge3.mix}}
+  name Grade1
+  xpos 1086
+  ypos 403
+ }
+ Grade {
+  white 4
+  multiply 20
+  black_clamp false
+  name Grade2
+  xpos 1087
+  ypos 438
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 1084
+  ypos 462
+ }
+ TimeBlur {
+  divisions {{parent.CONTROL_DIRT.DirtLayers}}
+  shutter 0.999
+  shutteroffset start
+  shuttercustomoffset 0
+  name TimeBlur1
+  xpos 1086
+  ypos 502
+  addUserKnob {20 User}
+  addUserKnob {7 decimalFrameStepped l "Decimal Frame Stepped"}
+  decimalFrameStepped {{((frame%1)*divisions)/divisions}}
+ }
+ Multiply {
+  channels rgba
+  value {{parent.TimeBlur1.divisions}}
+  name Multiply5
+  xpos 1084
+  ypos 581
+ }
+ Remove {
+  channels alpha
+  name Remove2
+  xpos 1087
+  ypos 778
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  mix 0.815
+  name Merge2
+  xpos 1087
+  ypos 863
+  disable {{parent.CONTROL_DIRT.bg}}
+ }
+ Dot {
+  name Dot3
+  xpos 1121
+  ypos 976
+ }
+push $N36e13400
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge1
+  xpos 1737
+  ypos 972
+ }
+ Grade {
+  inputs 1+1
+  white 0.23
+  black_clamp false
+  name Grade4
+  xpos 1737
+  ypos 1080
+  disable {{parent.CONTROL_DIRT.bg}}
+ }
+ FrameHold {
+  firstFrame 1001
+  name FrameHold1
+  xpos 1737
+  ypos 1506
+  cached true
+ }
+ NoOp {
+  name CONTROL_DIRT
+  xpos 1737
+  ypos 1620
+  addUserKnob {20 User}
+  addUserKnob {4 Preset M {"Preset 1" "Preset 2" "Preset 3" ""}}
+  Preset "Preset 3"
+  addUserKnob {7 DirtLayers l "Dirt Layers" R 0 10}
+  DirtLayers 10
+  addUserKnob {7 Seed R 5 20}
+  Seed 10
+  addUserKnob {7 DirtSize l "Dirt Size"}
+  DirtSize 0.025
+  addUserKnob {6 bg +STARTLINE}
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop1
+  xpos 1737
+  ypos 1674
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos 1737
+  ypos 1728
+ }
+ Output {
+  name Output1
+  xpos 1737
+  ypos 1828
+ }
+end_group
